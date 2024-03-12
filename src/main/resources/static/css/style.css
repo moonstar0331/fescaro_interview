@@ -1,0 +1,161 @@
+
+h1 {
+    text-align:center;
+}
+
+div {
+    font-size: 30px;
+    text-align: center;
+}
+
+#main {
+    display: inline-block;
+    margin: 0 auto;
+}
+
+#main #contents {
+    min-height: 500px;
+    margin-right: 10px;
+    display: inline-block;
+    width: 80%;
+}
+
+#main #contents #filebox {
+    width: 100%;
+    margin: 0 auto;
+    display: inline-block;
+}
+
+#main #contents #filebox #filebox-content {
+    display: inline-block;
+    width: 100%;
+}
+
+#main #contents #filebox #filebox-content #upload-file-name {
+    display: inline-block;
+    height: 30px;
+    padding: 5px 5px;
+    vertical-align: middle;
+    border: 2px solid #dddddd;
+    width: 78%;
+    border-radius: 5px;
+    float: left;
+}
+
+#main #contents #filebox #filebox-content #upload-file-name::placeholder {
+    font-style: italic;
+    color: #dddddd;
+}
+
+#main #contents #filebox #filebox-content label {
+    border-radius: 5px;
+    display: inline-block;
+    padding: 5px 10px;
+    border: 2px solid #dddddd;
+    vertical-align: middle;
+    background-color: #eeeeee;
+    cursor: pointer;
+    height: 30px;
+    margin-left: 10px;
+    font-size: medium;
+    line-height: 30px;
+    float: right;
+    width: 12%;
+}
+
+#main #contents #filebox #filebox-content input[type="file"] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+}
+
+#main #contents #filebox #filebox-content #btn-box {
+    width: 100%;
+    margin: 5px auto;
+    display: inline-block;
+}
+
+#main #contents #filebox #filebox-content #btn-box input[type="submit"] {
+    display: inline-block;
+    padding: 0 10px;
+    text-align: center;
+    border-radius: 5px;
+    background-color: #00BFFF;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    height: 30px;
+    width: 100%;
+    color: #eeeeee;
+}
+
+#main #contents #table-content {
+    width: 100%;
+    margin: 10px auto;
+    display: inline-block;
+}
+
+#main #contents #table-content table {
+    border: 2px solid #dddddd;
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-spacing: 1px;
+    font-size: medium;
+}
+
+#main #contents #table-content th {
+    border: 2px solid #dddddd;
+    padding: 1px;
+}
+
+#main #contents #table-content td {
+    border: 2px solid #dddddd;
+    padding: 1px;
+}
+
+.td-box {
+    display: inline-block;
+    width: 100%;
+    vertical-align: -webkit-baseline-middle;
+}
+
+.td-box span {
+    display: inline-block;
+    padding-left: 10px;
+    font-size: large;
+    float: left;
+}
+
+.td-box img {
+    display: inline-block;
+    float: right;
+    height: 24px;
+    padding-right: 10px;
+    filter: invert(55%) sepia(87%) saturate(2144%) hue-rotate(160deg) brightness(101%) contrast(107%);
+}
+
+#main #contents #pagination {
+    display: inline-block;
+    width: 100%;
+}
+
+#main #contents #pagination #pagination-content {
+    display: inline-block;
+    float: right;
+}
+
+#main #contents #pagination #pagination-content span {
+    font-size: small;
+    padding: 0 8px;
+}
+
+#main #contents #pagination #pagination-content a {
+    color: #00BFFF;
+    font-size: small;
+    padding: 0 8px;
+    text-decoration: none;
+}
