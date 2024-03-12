@@ -76,6 +76,7 @@ public class FileServiceImpl implements FileService {
                 .originFilePath(targetFile.getAbsolutePath())
                 .encryptedFileName(encryptedFile.getName())
                 .encryptedFilePath(encryptedFile.getAbsolutePath())
+                .iv(toHexaString(iv))
                 .build();
         fileRepository.save(fileEntity);
 

@@ -24,7 +24,7 @@ public class MainController {
      * @return 반환하고자 하는 View의 이름을 반환한다.
      */
     @GetMapping("/")
-    public String home(@PageableDefault(size = 5, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
+    public String home(@PageableDefault(size = 5, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
                        Model model) {
         Page<FileDto> fileInfos = mainService.findAllFiles(pageable);
         model.addAttribute("curPage", pageable.getPageNumber());

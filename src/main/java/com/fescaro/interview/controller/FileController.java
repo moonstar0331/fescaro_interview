@@ -40,6 +40,8 @@ public class FileController {
      * @param type 다운로드 하고자 하는 파일의 타입
      * @return 다운로드 하는 파일의 리소스를 반환한다.
      * @throws MalformedURLException 잘못된 프로토콜 또는 파일의 경로의 경우 발생
+     * @Reference
+     * 1. https://lannstark.tistory.com/8
      */
     @GetMapping("/download/{fileName}")
     @ResponseBody
