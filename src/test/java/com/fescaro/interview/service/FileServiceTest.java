@@ -21,8 +21,10 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.InvalidAlgorithmParameterException;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 
@@ -62,6 +64,7 @@ class FileServiceTest {
     @DisplayName("파일을 업로드하면 암호화 대상 파일과 암호화 된 파일이 저장된다.")
     @Test
     void 파일_업로드시_암호화_대상파일_저장_정상수행() throws Exception {
+
         // given
         MockMultipartFile multipartFile = new MockMultipartFile(
                 "file",
@@ -108,9 +111,11 @@ class FileServiceTest {
         then(fileRepository).should().save(any(FileEntity.class));
     }
 
-    @DisplayName("암호화 된 파일을 복호화를 하면 암호화 대상 파일과 같은 내용이다.")
+    @DisplayName("같은 키를 가지고 암호화 된 파일을 복호화를 하면 암호화 대상 파일과 같은 내용이다.")
     @Test
     void 파일_복호화시_원본과_같은_내용() throws Exception {
+
+        // given
         MockMultipartFile multipartFile = new MockMultipartFile(
                 "file",
                 "file.bin",
@@ -151,6 +156,54 @@ class FileServiceTest {
 
         // then
         assertThat(checkFile).content().isEqualTo("Hello, World!");
+    }
+
+    @DisplayName("암호화 시와 다른 키를 가지고 복호화를 시도하면 실패한다.")
+    @Test
+    void 암호화시와_다른키로_복호화_시도하면_실패() throws Exception {
+
+        // given
+        MockMultipartFile multipartFile = new MockMultipartFile(
+                "file",
+                "file.bin",
+                MediaType.MULTIPART_FORM_DATA.toString(),
+                "Hello, World!".getBytes()
+        );
+
+        FileEntity fileEntity = createFileEntity();
+        given(fileRepository.save(any(FileEntity.class))).willReturn(fileEntity);
+
+        // when
+
+        // then
+        assertThrows(InvalidAlgorithmParameterException.class, () -> {
+            EncryptionDto encryptionDto = fileService.uploadProcess(multipartFile);
+
+            File encryptedFile = new File(encryptionDto.getEncryptedFile().getAbsoluteFile().toString());
+
+            String checkFilePath = CHECK_FILE_DIRECTORY_PATH + "/file_check.bin";
+            File checkFile = new File(checkFilePath);
+
+            InputStream input = new BufferedInputStream(new FileInputStream(encryptedFile));
+            FileOutputStream fos = new FileOutputStream(checkFile);
+
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            SecretKey secretKey = FileServiceImpl.generateKey(FileServiceImpl.KEY);
+            cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec("asdasdasd".getBytes()));
+
+            byte[] buffer = new byte[64];
+            int read;
+            while ((read = input.read(buffer)) != -1) {
+                byte[] output = cipher.update(buffer, 0, read);
+                if (output != null) {
+                    fos.write(output);
+                }
+            }
+            byte[] finalBytes = cipher.doFinal();
+            if (finalBytes != null) {
+                fos.write(finalBytes);
+            }
+        });
     }
 
     private FileEntity createFileEntity() {
