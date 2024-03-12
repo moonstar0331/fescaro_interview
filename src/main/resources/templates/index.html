@@ -30,19 +30,21 @@
                         <td>일시</td>
                     </tr>
                 </thead>
-                <tbody th:each="fileInfo: ${fileInfos}">
+                <tbody th:each="fileInfo, fileInfoStat: ${fileInfos}">
                 <tr>
-                    <td><span th:text="${fileInfo.getId()}"></span></td>
+                    <td><span th:text="${curPage * 5 + fileInfoStat.count}"></span></td>
                     <td>
                         <div class="td-box">
                             <span th:text="${fileInfo.getOriginFileName()}"></span>
-                            <img src="images/download.svg" th:onclick="|down_ori(${fileInfo.getId()})|">
+                            <img src="images/download.svg" th:data-fileName="${fileInfo.getOriginFileName()}"
+                                 onclick="down_ori(this.getAttribute('data-fileName'))">
                         </div>
                     </td>
                     <td>
                         <div class="td-box">
                             <span th:text="${fileInfo.getEncryptedFileName()}"></span>
-                            <img src="images/download.svg" th:onclick="|down_enc(${fileInfo.getId()})|">
+                            <img src="images/download.svg" th:data-fileName="${fileInfo.getEncryptedFileName()}"
+                                 onclick="down_enc(this.getAttribute('data-fileName'))">
                         </div>
                     </td>
 <!--                    <td><span th:text="${fileInfo.getIvBytes()}"></span></td>-->

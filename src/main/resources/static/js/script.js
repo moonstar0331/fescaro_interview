@@ -9,5 +9,5 @@ function down_ori(id) {
 }
 
 function down_enc(id) {
-    location.href = 'http://localhost:8080/api/download-origin/' + id + "?type=ENC";
+    location.href = 'http://localhost:8080/api/download/' + id + "?type=ENC";
 }
