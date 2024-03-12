@@ -5,9 +5,11 @@ import com.fescaro.interview.entity.FileEntity;
 import com.fescaro.interview.repository.FileRepository;
 import com.fescaro.interview.service.FileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriUtils;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherOutputStream;
@@ -17,6 +19,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -106,9 +109,41 @@ public class FileServiceImpl implements FileService {
         }
     }
 
+    /**
+     * 요청한 타입에 맞는 파일을 다운로드한다.
+     * @param id   다운로드 하는 파일의 키 값
+     * @param type 다운로드 하는 파일의 타입
+     * @return 다운로드 하는 파일의 리소스 및 파일명을 가진 DTO 객체를 반환한다.
+     * @throws MalformedURLException
+     * @Step
+     * 1. 파일 정보를 DB에서 가져옴
+     * 2. 다운로드 하는 파일의 타입 비교
+     * 3. 다운로드 하는 파일의 리소스 및 파일명 생성
+     * @Reference
+     * 1. https://yoons-development-space.tistory.com/87
+     */
     @Override
     public FileDownloadDto fileDownload(Long id, String type) throws MalformedURLException {
-        return null;
+        FileEntity fileEntity = fileRepository.findById(id).get();
+
+        UrlResource resource = null;
+        String fileName = null;
+
+        // 파일 타입 비교
+        if (type.equals("ORIGIN")) {
+            resource = new UrlResource("file:" + fileEntity.getOriginFilePath());
+            fileName = UriUtils.encode(fileEntity.getOriginFileName(), StandardCharsets.UTF_8);
+        } else if (type.equals("ENC")) {
+            resource = new UrlResource("file:" + fileEntity.getEncryptedFilePath());
+            fileName = UriUtils.encode(fileEntity.getEncryptedFileName(), StandardCharsets.UTF_8);
+        } else {
+            throw new RuntimeException("파일의 타입을 지정 해주세요.");
+        }
+
+        return FileDownloadDto.builder()
+                .urlResource(resource)
+                .fileName(fileName)
+                .build();
     }
 
     /**
