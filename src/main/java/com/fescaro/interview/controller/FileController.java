@@ -28,7 +28,7 @@ public class FileController {
      */
     @PostMapping("/upload")
     public ResponseEntity<?> upload(@RequestPart(value = "file") MultipartFile multipartFile) throws Exception {
-        fileService.fileUpload(multipartFile);
+        fileService.uploadProcess(multipartFile);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create("/"));
         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
@@ -36,15 +36,15 @@ public class FileController {
 
     /**
      * 원본 및 암호화된 파일 다운로드를 수행한다.
-     * @param id 다운로드 하고자 하는 원본 및 암호화 파일의 키 값
+     * @param fileName 다운로드 하고자 하는 원본 및 암호화 파일명
      * @param type 다운로드 하고자 하는 파일의 타입
      * @return 다운로드 하는 파일의 리소스를 반환한다.
      * @throws MalformedURLException 잘못된 프로토콜 또는 파일의 경로의 경우 발생
      */
-    @GetMapping("/download/{id}")
+    @GetMapping("/download/{fileName}")
     @ResponseBody
-    public ResponseEntity<Resource> download(@PathVariable Long id, @RequestParam String type) throws MalformedURLException {
-        FileDownloadDto fileDownloadDto = fileService.fileDownload(id, type);
+    public ResponseEntity<Resource> download(@PathVariable String fileName, @RequestParam String type) throws MalformedURLException {
+        FileDownloadDto fileDownloadDto = fileService.fileDownload(fileName, type);
         String contentDisposition = "attachment; filename=\"" + fileDownloadDto.getFileName() + "\"";
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)

@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 public class FileDto {
-    private Long id;
     private String originFileName;
     private String originFilePath;
     private String encryptedFileName;
@@ -21,7 +20,6 @@ public class FileDto {
 
     public static FileDto from(FileEntity entity) {
         return FileDto.builder()
-                .id(entity.getId())
                 .originFileName(entity.getOriginFileName())
                 .originFilePath(entity.getOriginFilePath())
                 .encryptedFileName(entity.getEncryptedFileName())
