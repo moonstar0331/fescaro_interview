@@ -56,6 +56,23 @@ class FileControllerTest {
                 .andExpect(redirectedUrl("/"));
     }
 
+    @DisplayName("[POST]")
+    @Test
+    void 용량이_0인_파일_업로드시_메인페이지로_리다이렉트() throws Exception {
+        // given
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "test.bin",
+                MediaType.MULTIPART_FORM_DATA.toString(),
+                new byte[0]
+        );
+
+        // when & then
+        mvc.perform(multipart("/api/upload")
+                        .file(file))
+                .andExpect(status().isBadRequest());
+    }
+
     @DisplayName("[GET] 파일 다운로드 호출 (ORIGIN TYPE) - 정상 호출")
     @Test
     void 파일_다운로드_원본파일() throws Exception {

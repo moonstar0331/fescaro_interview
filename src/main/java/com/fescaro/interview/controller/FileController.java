@@ -28,6 +28,8 @@ public class FileController {
      */
     @PostMapping("/upload")
     public ResponseEntity<?> upload(@RequestPart(value = "file") MultipartFile multipartFile) throws Exception {
+        if (multipartFile.isEmpty()) return ResponseEntity.badRequest().build();
+
         fileService.uploadProcess(multipartFile);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create("/"));
