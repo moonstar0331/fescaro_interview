@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fescaro</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+<div id="main">
+    <div id="contents">
+        <div id="filebox">
+            <form id="filebox-content" th:action="@{/api/upload}" method="post" enctype="multipart/form-data">
+                <input id="upload-file-name" placeholder="암호화 대상 파일을 업로드 하세요." readonly>
+                <label for="file">찾아보기</label>
+                <input type="file" id="file" class="file-input" accept=".bin" name="file" required>
+                <div id="btn-box">
+                    <input id="submit-btn" type="submit" role="button" value="제출하기">
+                </div>
+            </form>
+        </div>
+        <div id="table-content">
+            <table>
+                <thead>
+                    <tr>
+                        <td>No.</td>
+                        <td>암호화 대상 파일</td>
+                        <td>암호화 된 파일</td>
+                        <td>IV 값</td>
+                        <td>일시</td>
+                    </tr>
+                </thead>
+                <tbody th:each="fileInfo: ${fileInfos}">
+                <tr>
+                    <td><span th:text="${fileInfo.getId()}"></span></td>
+                    <td>
+                        <div class="td-box">
+                            <span th:text="${fileInfo.getOriginFileName()}"></span>
+                            <img src="images/download.svg" th:onclick="|down_ori(${fileInfo.getId()})|">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="td-box">
+                            <span th:text="${fileInfo.getEncryptedFileName()}"></span>
+                            <img src="images/download.svg" th:onclick="|down_enc(${fileInfo.getId()})|">
+                        </div>
+                    </td>
+<!--                    <td><span th:text="${fileInfo.getIvBytes()}"></span></td>-->
+                    <td><span th:text="${fileInfo.getIv()}"></span></td>
+                    <td><span th:text="${#temporals.format(fileInfo.getCreatedAt(), 'yyyy-MM-dd HH:mm:ss')}"></span></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="pagination">
+            <div id="pagination-content">
+                <a th:href="@{/(page=${curPage - 1})}" th:class="'page-btn' + (${curPage} <= 0 ? ' disabled' : '')">&laquo;</a>
+                <span th:text="${curPage + 1}">현재페이지</span><span>/</span><span th:text="${totalPage == 0 ? totalPage + 1 : totalPage}">전체페이지</span>
+                <a th:href="@{/(page=${curPage + 1})}" th:class="'page-btn' + (${curPage} >= ${totalPage - 1} ? ' disabled' : '')">&raquo;</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="js/script.js"></script>
+</html>
